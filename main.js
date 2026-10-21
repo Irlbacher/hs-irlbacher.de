@@ -313,10 +313,21 @@ if (!ruhig) {
         k.textContent.split(/(\s+)/).forEach(w => {
           if (!w.trim()) { el.appendChild(document.createTextNode(' ')); return; }
           const s = document.createElement('span'); s.className = 'wort';
-          const i = document.createElement('i'); i.textContent = w; s.appendChild(i); el.appendChild(s);
+          const i = document.createElement('i');
+          // Satzzeichen am Wortende enger an das Wort (Plus Jakarta setzt , . ! ? in großer Schrift sichtbar ab — 21.10.2026)
+          const z = w.match(/^(.*?)([.,!?;:]+)$/);
+          if (z && z[1]) { i.textContent = z[1]; const p = document.createElement('span'); p.className = 'satz'; p.textContent = z[2]; i.appendChild(p); }
+          else i.textContent = w;
+          s.appendChild(i); el.appendChild(s);
         });
       } else if (k.nodeName === 'BR') { el.appendChild(k); }
       else {
+        // dasselbe für Satzzeichen am Ende eines Elements (<em>Frische Luft.</em>)
+        const letzt = k.lastChild;
+        if (letzt && letzt.nodeType === 3) {
+          const z = letzt.textContent.match(/^([\s\S]*?)([.,!?;:]+)$/);
+          if (z && z[1]) { letzt.textContent = z[1]; const p = document.createElement('span'); p.className = 'satz'; p.textContent = z[2]; k.appendChild(p); }
+        }
         const s = document.createElement('span'); s.className = 'wort';
         const i = document.createElement('i'); i.appendChild(k); s.appendChild(i); el.appendChild(s);
       }

@@ -254,7 +254,10 @@ body.menu-auf .menu-flaeche a:nth-child(6){transition-delay:.31s}
 .rohr .grund{stroke:rgba(20,26,34,.08)}
 .rohr .fluss{stroke:url(#fluss-verlauf);stroke-dasharray:var(--len,1000);stroke-dashoffset:calc(var(--len,1000) * (1 - var(--p,0)));transition:stroke-dashoffset .1s linear}
 .schritte{display:grid;gap:clamp(40px,6vw,80px);position:relative;z-index:1}
-.schritt{display:grid;grid-template-columns:1fr 120px 1fr;align-items:center;gap:0}
+.schritt{display:grid;grid-template-columns:1fr 120px 1fr;align-items:stretch;gap:0}
+.schritt>*{grid-row:1}
+.schritt .ventil{align-self:center}
+.schritt-karte{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
 .schritt-karte{background:#fff;border:var(--kante);border-radius:var(--r);padding:32px 34px;box-shadow:0 20px 50px -30px rgba(20,26,34,.18);transition:transform var(--ueb),box-shadow var(--ueb)}
 .schritt:nth-child(odd) .schritt-karte{grid-column:1}
 .schritt:nth-child(even) .schritt-karte{grid-column:3}
@@ -270,7 +273,8 @@ body.menu-auf .menu-flaeche a:nth-child(6){transition-delay:.31s}
 
 /* ---------- Statement: Wort für Wort beim Scrollen ---------- */
 .statement{position:relative;overflow:hidden;background:var(--nacht);min-height:clamp(420px,62vh,640px);display:flex;align-items:center;--p:0}
-.statement-bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;filter:saturate(.8) brightness(.38);transform:translate3d(0,calc((var(--p) - .5) * -90px),0) scale(1.18);will-change:transform}
+.statement-bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;filter:saturate(.8) brightness(.3);transform:translate3d(0,calc((var(--p) - .5) * -90px),0) scale(1.18);will-change:transform}
+.statement::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(15,23,32,.45),rgba(15,23,32,.55))}
 .statement .wrap{position:relative;z-index:2;text-align:center}
 .statement h2{color:#fff;max-width:24ch;margin:0 auto;font-size:clamp(28px,4.2vw,58px)}
 .statement h2 i{font-style:normal;opacity:clamp(.14, var(--p) * var(--n,8) - var(--i,0), 1)} /* Skill scroll-text: Ruhe blass wie am Anfang (Noah, 22.09.2026 abends), Wort i voll bei p·n ≥ i+1 */
@@ -533,7 +537,7 @@ html.kein-js .statement h2 i{opacity:1}
 
 /* ---------- Footer ---------- */
 footer{background:var(--nacht);color:rgba(255,255,255,.72);padding:80px 0 34px;position:relative;overflow:hidden}
-footer .ring{right:-220px;top:-220px;width:620px;height:620px;opacity:.16}
+footer .ring{right:-560px;top:-120px;width:620px;height:620px;opacity:.1;z-index:0}
 footer .wrap{position:relative;z-index:1}
 .footer-raster{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:44px;border-bottom:var(--kante-dunkel)}
 .footer-logo img{height:100px;width:auto;margin-bottom:20px}
@@ -646,7 +650,7 @@ html.ankunft body.geladen .wipe{transition:clip-path .7s cubic-bezier(.7,0,.3,1)
   .jobs-band .bild{min-height:300px;order:-1}
   .jobs-band .bild::after{background:linear-gradient(to top,var(--nacht) 0%,transparent 40%)}
   .stelle .bild{min-height:280px;order:-1}
-  .hero .ring{right:-40vw;width:110vw;height:110vw;opacity:.45}
+  .hero .ring{right:-78vw;top:30%;width:100vw;height:100vw;opacity:.4}
   .tag-punkte{grid-template-columns:repeat(2,1fr);gap:22px}
   .tag-linie{display:none}
   .tag-punkt i{margin-top:0}
@@ -680,6 +684,7 @@ html.ankunft body.geladen .wipe{transition:clip-path .7s cubic-bezier(.7,0,.3,1)
   .tag-punkte{grid-template-columns:1fr}
   .cookie{left:12px;right:12px;bottom:12px;max-width:none;flex-direction:column;align-items:flex-start}
   .info-karte .ring{display:none}
+  footer .ring{display:none}
   .topbar .rechts{gap:14px}
   .topbar span,.topbar a{font-size:13px}
 }
@@ -696,3 +701,43 @@ html.ankunft body.geladen .wipe{transition:clip-path .7s cubic-bezier(.7,0,.3,1)
 
 /* ── Stil-Check 22.09.2026: eine Familie, ein Radius (system/apps/audit/stil_pruefen.mjs) ── */
 div.cookie{border-radius:28px !important}   /* Karten: 18 → 28 */
+
+/* ---------- Apple-Regeln (21.10.2026, Helena) — helena_apple_regeln.py muss über alle Seiten 0 Verstöße zeigen ----------
+   Vorher 1.546 Verstöße (Prüfer lief nie über diese Seite). Bewegung ≤ .4 s (Bilder ≤ .6 s), Druck-Feedback auf jedem
+   Klickziel, kleine Schrift mit positivem Tracking, große Schrift eng gesetzt, Tippziele ≥ 44 px, Kacheln antworten auf Hover. */
+:root{--feder:.4s cubic-bezier(.16,1,.3,1)}
+.rev{transition-duration:.4s,.4s}
+.rev-1{transition-delay:.05s}.rev-2{transition-delay:.1s}.rev-3{transition-delay:.15s}.rev-4{transition-delay:.2s}
+.iris{transition-duration:.4s}
+.faq-antwort{transition-duration:.35s}
+.ventil{transition-duration:.3s}
+.thermo{transition-duration:.4s}
+.hand-kicker svg path{transition-duration:.4s;transition-delay:.15s}
+.menu-flaeche a{transition-duration:.35s;line-height:1.15}
+.kachel img{transition-duration:.6s}
+.intro-kreis{transition-duration:.4s}
+/* Hero-Zoom: langsames Ausrollen als Animation beim Laden statt als 14-s-Übergang (reduced-motion schaltet es oben ab) */
+.hero-medien img{transition:none;transform:scale(1);animation:hero-zoom 14s cubic-bezier(.2,.6,.3,1) both}
+@keyframes hero-zoom{from{transform:scale(1.1)}to{transform:scale(1)}}
+/* Druck-Feedback: Links dimmen beim Antippen, Flächen drücken sich ein (eigene Regeln oben bleiben) */
+a:active,button:active,summary:active,[role=button]:active{opacity:.7;transition-duration:.1s;transition-delay:0s}
+/* Tracking: kleine Schrift leicht geöffnet, große Schrift eng */
+body{letter-spacing:.01em}
+.hand-kicker,.zitat{letter-spacing:-.01em}
+/* Tippziele: kurze Menüpunkte bekommen die volle Breite von 44 px */
+nav.haupt a{min-width:44px;justify-content:center}
+/* Hover-Antwort für Kennzahlen und Ablauf-Schritte */
+.zahl{transition:color var(--ueb)}
+.zahl:hover,.zahl-kachel:hover .zahl{color:var(--gelb)}
+.schritt:hover{--schritt-an:1}
+.schritt .ventil:not(.an){transform:scale(calc(1 + var(--schritt-an,0) * .08))}
+.lauf-item img,.karte-bild img,.person .bild img{transition-duration:.6s}
+.gewerk-wahl span,.handy-ton span{letter-spacing:.01em}
+.person.du .bild b{letter-spacing:-.02em;line-height:1}
+.menu-flaeche a{min-width:44px}
+.mob-leistungen a{min-height:44px;display:flex;align-items:center}
+.krumen a{min-width:44px}
+.topbar .rechts a{display:inline-flex;align-items:center;min-height:44px;margin:-12px 0}
+.info-zeile a{display:inline-flex;align-items:center;min-height:44px;margin:-11px 0}
+/* Satzzeichen in Überschriften: heranziehen, sonst wirkt „Heizung ,“ abgesetzt (main.js setzt .satz) */
+.wort .satz{margin-left:-.08em}
