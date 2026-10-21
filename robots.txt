@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.hs-irlbacher.de/sitemap.xml
