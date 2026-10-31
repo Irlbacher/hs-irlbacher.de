@@ -431,3 +431,41 @@ document.querySelectorAll('form.formular[action]').forEach(form => {
 /* Spam-Schutz ohne Cookie: Ladezeit ins Formular. Der Formular-Dienst verwirft Absendungen
    unter 3 s und solche mit leerem Feld (Bots ohne JavaScript). */
 document.querySelectorAll('form input[name="ts"]').forEach(function (f) { f.value = String(Date.now()); });
+
+/* ---------- Gesichts-Fokus: Kopf ganz und mittig im Ausschnitt (Noah, 25.09. + 31.10.2026) ----------
+   FOKUS = je Foto Gesichter (g) und Hände (h), Apple Vision, x/y/Breite/Höhe relativ, oben links.
+   Je Bildgröße wird der Ausschnitt gerechnet: Kopf mit Haaren drin und mittig, Gesten (zeigen, Daumen)
+   mit drin, wenn sie passen; passen zwei Personen nicht nebeneinander, steht die größere mittig.
+   Bilder mit von Hand gesetztem --pos-d/--pos-m (Hero, abgenommen) bleiben, wie sie sind.
+   Neue Fotos: swift kunden/irlbacher/shooting/gesichter_finden.swift <ordner> → faces.json. */
+const FOKUS = {"josef-arme":{"g":[[0.39,0.14,0.153,0.23]],"h":[[0.614,0.658,0.056,0.088]]},"josef-buero-b":{"g":[[0.307,0.087,0.144,0.215]],"h":[[0.355,0.863,0.181,0.131],[0.507,0.788,0.085,0.117]]},"josef-buero":{"g":[[0.258,0.093,0.135,0.202]],"h":[[0.308,0.859,0.172,0.13],[0.447,0.774,0.084,0.121]]},"josef-lachen":{"g":[[0.68,0.132,0.106,0.159],[0.271,0.118,0.118,0.177]],"h":[[0.041,0.399,0.089,0.17],[0.533,0.722,0.073,0.138],[0.923,0.799,0.069,0.111],[0.537,0.337,0.07,0.107]]},"josef-leiter":{"g":[[0.5,0.074,0.131,0.088]],"h":[[0.324,0.447,0.125,0.065],[0.76,0.357,0.061,0.072]]},"josef-meisterbrief":{"g":[[0.342,0.164,0.159,0.239]],"h":[[0.529,0.757,0.08,0.122]]},"josef-portrait":{"g":[[0.339,0.158,0.165,0.247]],"h":[[0.53,0.756,0.079,0.122]]},"josef-zange":{"g":[[0.24,0.122,0.152,0.229],[0.694,0.214,0.072,0.108]],"h":[[0.064,0.445,0.096,0.141],[0.803,0.511,0.049,0.074]]},"josef-zeigt-b":{"g":[[0.313,0.127,0.156,0.233]],"h":[[0.052,0.571,0.094,0.246]]},"josef-zeigt":{"g":[[0.321,0.111,0.15,0.224]],"h":[[0.06,0.551,0.094,0.252]]},"kopf-josef":{"g":[[0.12,0.212,0.324,0.324]],"h":[]},"kopf-matthias":{"g":[[0.242,0.252,0.247,0.247]],"h":[]},"matthias-daumen":{"g":[[0.343,0.115,0.164,0.247]],"h":[[0.649,0.728,0.135,0.269],[0.157,0.306,0.11,0.238]]},"matthias-logo":{"g":[[0.409,0.191,0.112,0.167]],"h":[[0.307,0.805,0.09,0.143]]},"matthias-regal-b":{"g":[[0.434,0.123,0.134,0.201]],"h":[[0.634,0.66,0.107,0.205],[0.165,0.865,0.07,0.134]]},"matthias-regal":{"g":[[0.214,0.177,0.163,0.245]],"h":[[0.719,0.428,0.123,0.157]]},"matthias-sackkarre":{"g":[[0.116,0.064,0.067,0.101],[0.327,0.359,0.07,0.106]],"h":[]},"matthias-zeigt":{"g":[[0.461,0.182,0.151,0.227]],"h":[[0.137,0.556,0.128,0.086]]},"poster-reel-josef":{"g":[[0.271,0.141,0.215,0.121]],"h":[[0.34,0.643,0.212,0.093]]},"team-laderaum":{"g":[[0.344,0.084,0.096,0.064],[0.531,0.372,0.103,0.069]],"h":[]},"team-seite-b":{"g":[[0.704,0.142,0.105,0.157],[0.281,0.095,0.122,0.184]],"h":[[0.144,0.358,0.095,0.17],[0.667,0.849,0.099,0.126],[0.524,0.776,0.066,0.138]]},"team-seite":{"g":[[0.685,0.131,0.101,0.151],[0.268,0.105,0.111,0.166]],"h":[[0.128,0.349,0.083,0.16],[0.651,0.812,0.09,0.113],[0.501,0.735,0.065,0.129],[0.931,0.751,0.068,0.13]]},"team-sitzen":{"g":[[0.258,0.109,0.116,0.175],[0.589,0.092,0.124,0.186]],"h":[[0.177,0.837,0.096,0.138],[0.624,0.873,0.088,0.124],[0.153,0.228,0.081,0.132]]},"team-zange-b":{"g":[[0.535,0.172,0.111,0.167],[0.3,0.138,0.104,0.156]],"h":[[0.022,0.343,0.073,0.134],[0.428,0.356,0.051,0.129],[0.484,0.326,0.051,0.112],[0.833,0.565,0.056,0.105]]},"team-zange-c":{"g":[[0.534,0.205,0.112,0.168],[0.186,0.166,0.121,0.181]],"h":[[0.005,0.383,0.075,0.133],[0.407,0.392,0.05,0.093],[0.464,0.357,0.047,0.108],[0.819,0.58,0.052,0.1]]},"team-zange":{"g":[[0.576,0.179,0.124,0.187],[0.199,0.134,0.129,0.194]],"h":[[0.011,0.36,0.082,0.142],[0.865,0.606,0.034,0.109]]},"van-tuer-b":{"g":[[0.717,0.141,0.091,0.136]],"h":[[0.653,0.317,0.07,0.085],[0.857,0.725,0.065,0.086]]},"van-tuer":{"g":[[0.641,0.16,0.083,0.124]],"h":[[0.597,0.333,0.057,0.081],[0.787,0.675,0.059,0.079]]}};
+const fokusName = im => { const s = im.currentSrc || im.src || ''; const m = s.match(/img-(.+?)-\d+\.\w+(?:\?|$)/) || s.match(/\/img\/([^/]+?)\.jpg/); return m && m[1]; };
+const fokussieren = im => {
+  const f = FOKUS[fokusName(im)];
+  if (!f || /--pos-/.test(im.getAttribute('style') || '') || getComputedStyle(im).objectFit !== 'cover') return;
+  const W = im.clientWidth, H = im.clientHeight, nw = im.naturalWidth, nh = im.naturalHeight;
+  if (!W || !H || !nw || !nh) return;
+  const s = Math.max(W / nw, H / nh), cw = W / (nw * s), ch = H / (nh * s);
+  const z = im.closest('.para') ? 1.12 : 1, sw = cw / z, sh = ch / z;   // Parallax vergrößert um 12 %
+  const kopf = g => [g[0], g[1] - 0.45 * g[3], g[0] + g[2], g[1] + g[3]];
+  const handk = h => [h[0], h[1], h[0] + h[2], h[1] + h[3]];
+  const huelle = ks => ks.reduce((a, k) => [Math.min(a[0], k[0]), Math.min(a[1], k[1]), Math.max(a[2], k[2]), Math.max(a[3], k[3])]);
+  const groesste = f.g.reduce((a, g) => g[2] * g[3] > a[2] * a[3] ? g : a);
+  const unten = Math.max(...f.g.map(g => g[1] + g[3])), fh = groesste[3];
+  const gehoben = f.h.filter(h => h[1] + h[3] / 2 < unten + 2 * fh);
+  const kandidaten = [[f.g, f.h], [f.g, gehoben], [f.g, []], [[groesste], []]];
+  const [gs, hs] = kandidaten.find(([g, h]) => { const k = huelle(g.map(kopf).concat(h.map(handk))); return k[2] - k[0] <= sw * 0.94; }) || [[groesste], []];
+  const kk = huelle(gs.map(kopf)), alles = huelle(gs.map(kopf).concat(hs.map(handk)));
+  // waagerecht: Gruppe mittig; senkrecht: Kopf oben im Bild, Geste mit drin, wenn sie in die Höhe passt
+  let x0 = (alles[0] + alles[2]) / 2 - sw / 2;
+  let y0 = Math.min((kk[1] + kk[3]) / 2 - sh * 0.38, kk[1] - 0.05 * sh);
+  const [o, u] = alles[3] - alles[1] <= sh * 0.96 ? [alles[1], alles[3]] : [kk[1], kk[3]];
+  if (u - o <= sh) y0 = Math.max(u - sh + 0.02 * sh, Math.min(o - 0.02 * sh, y0));
+  x0 -= (cw - sw) / 2; y0 -= (ch - sh) / 2;
+  x0 = Math.max(0, Math.min(1 - cw, x0)); y0 = Math.max(0, Math.min(1 - ch, y0));
+  const px = cw < 0.999 ? x0 / (1 - cw) * 100 : 50, py = ch < 0.999 ? y0 / (1 - ch) * 100 : 50;
+  im.style.objectPosition = px.toFixed(1) + '% ' + py.toFixed(1) + '%';
+};
+const fokusAlle = () => document.querySelectorAll('img').forEach(im => im.complete ? fokussieren(im) : im.addEventListener('load', () => fokussieren(im), { once: true }));
+fokusAlle();
+let fokusZeit; addEventListener('resize', () => { clearTimeout(fokusZeit); fokusZeit = setTimeout(fokusAlle, 120); });
